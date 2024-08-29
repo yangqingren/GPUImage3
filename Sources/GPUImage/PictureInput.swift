@@ -107,7 +107,7 @@ public class PictureInput: ImageSource {
         }
     }
     
-    deinit {
+    func clean() {
         let textureLoader = MTKTextureLoader(device: sharedMetalRenderingDevice.device)
         do {
             if let url = Bundle.module.url(forResource: "blackEmtry", withExtension: "jpg"), let image = UIImage.init(contentsOfFile: url.path), let cgImage = image.cgImage {
