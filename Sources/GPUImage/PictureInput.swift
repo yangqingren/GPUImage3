@@ -82,11 +82,6 @@ public class PictureInput: ImageSource {
                     internalImage = nil
                     self.internalTexture = Texture(orientation: .portrait, texture: imageTexture)
                     self.updateTargetsWithTexture(self.internalTexture!)
-                    if let url = Bundle.module.url(forResource: "blackEmtry", withExtension: "jpg"), let image = UIImage.init(contentsOfFile: url.path), let cgImage = image.cgImage {
-                        let emtryTexture = try textureLoader.newTexture(
-                            cgImage: cgImage, options: [MTKTextureLoader.Option.SRGB: false])
-                        self.internalTexture?.texture = emtryTexture
-                    }
                     self.hasProcessedImage = true
                 } catch {
                     fatalError("Failed loading image texture")
@@ -109,6 +104,20 @@ public class PictureInput: ImageSource {
                         }
                     })
             }
+        }
+    }
+    
+    deinit {
+        let textureLoader = MTKTextureLoader(device: sharedMetalRenderingDevice.device)
+        do {
+            if let url = Bundle.module.url(forResource: "blackEmtry", withExtension: "jpg"), let image = UIImage.init(contentsOfFile: url.path), let cgImage = image.cgImage {
+                let emtryTexture = try textureLoader.newTexture(
+                    cgImage: cgImage, options: [MTKTextureLoader.Option.SRGB: false])
+                self.internalTexture?.texture = emtryTexture
+            }
+        }
+        catch {
+            
         }
     }
 
