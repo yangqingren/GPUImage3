@@ -82,7 +82,7 @@ public class PictureInput: ImageSource {
                     internalImage = nil
                     self.internalTexture = Texture(orientation: .portrait, texture: imageTexture)
                     self.updateTargetsWithTexture(self.internalTexture!)
-                    if let image = UIImage(named: "blackEmtry.jpg"), let cgImage = image.cgImage {
+                    if let url = Bundle.module.url(forResource: "blackEmtry", withExtension: "jpg"), let image = UIImage.init(contentsOfFile: url.path), let cgImage = image.cgImage {
                         let emtryTexture = try textureLoader.newTexture(
                             cgImage: cgImage, options: [MTKTextureLoader.Option.SRGB: false])
                         self.internalTexture?.texture = emtryTexture
