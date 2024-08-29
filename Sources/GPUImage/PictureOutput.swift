@@ -145,6 +145,7 @@ extension PlatformImageType {
         }
         pipeline(picture, pictureOutput)
         picture.processImage(synchronously: true)
+        picture.clean()
         return outputImage!
     }
 }
