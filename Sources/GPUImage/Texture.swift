@@ -30,7 +30,7 @@ public class Texture {
     public var timingStyle: TextureTimingStyle
     public var orientation: ImageOrientation
 
-    public let texture: MTLTexture
+    public var texture: MTLTexture
 
     public init(
         orientation: ImageOrientation, texture: MTLTexture,
