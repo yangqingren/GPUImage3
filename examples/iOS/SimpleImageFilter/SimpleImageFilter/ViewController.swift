@@ -7,29 +7,43 @@ class ViewController: UIViewController {
 
     var picture: PictureInput!
     var filter: SaturationAdjustment!
+    
+    lazy var imageView: UIImageView = {
+        let view = UIImageView(frame: self.view.bounds)
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         // Filtering image for saving
-        let testImage = UIImage(named: "WID-small.jpg")!
-        let toonFilter = ToonFilter()
-        let filteredImage = testImage.filterWithOperation(toonFilter)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.addSubview(self.imageView)
 
-        let pngImage = UIImagePNGRepresentation(filteredImage)!
-        do {
-            let documentsDir = try FileManager.default.url(
-                for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileURL = URL(string: "test.png", relativeTo: documentsDir)!
-            try pngImage.write(to: fileURL, options: .atomic)
-        } catch {
-            print("Couldn't write to file with error: \(error)")
+        self.runFilter()
+    }
+    
+    
+
+    func runFilter() {
+        let group = OperationGroup()
+        let blur1 = GaussianBlur()
+        let blur2 = GaussianBlur()
+        group.configureGroup { input, output in
+            input --> blur1 --> blur2 --> output
         }
-
-        // Filtering image for display
-        picture = PictureInput(image: UIImage(named: "WID-small.jpg")!)
-        filter = SaturationAdjustment()
-        picture --> filter --> renderView
-        picture.processImage()
+        let testImage = UIImage(named: "IMG_1009.jpg")!
+        let filteredImage = testImage.filterWithOperation(group)
+        self.imageView.image = filteredImage
+        blur1.inputTextures.removeAll()
+        blur2.inputTextures.removeAll()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.runFilter()
+        }
     }
 }
