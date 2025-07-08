@@ -1,7 +1,7 @@
 import AVFoundation
 import Metal
 
-public class MovieInput: ImageSource {
+open class MovieInput: ImageSource {
     public let targets = TargetContainer()
     public var runBenchmark = false
 
@@ -104,7 +104,7 @@ public class MovieInput: ImageSource {
         self.endProcessing()
     }
 
-    func endProcessing() {
+    open func endProcessing() {
 
     }
 
